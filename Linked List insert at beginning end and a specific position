@@ -1,1 +1,158 @@
+#include <iostream>
+using namespace std;
+
+// Class representing a node in the linked list
+class node
+{
+public:
+    int data;      // Data stored in the node
+    node* next;    // Pointer to the next node
+
+    // Constructor to initialize a new node
+    node(int value)
+    {
+        data = value;
+        next = nullptr;
+    }
+};
+
+// Class representing the linked list
+class list
+{
+private:
+    node* head;    // Pointer to the head (first node) of the list
+    node* tail;    // Pointer to the tail (last node) of the list
+
+public:
+    // Constructor to initialize an empty list
+    list()
+    {
+        head = tail = nullptr;
+    }
+
+    // Function to insert a new node at the end of the list
+    void insertLast(int value)
+    {
+        node* newNode = new node(value);  // Create a new node
+        if (head == nullptr)              // Check if the list is empty
+        {
+            head = tail = newNode;        // New node becomes head and tail
+        }
+        else
+        {
+            tail->next = newNode;         // Link the new node to the end
+            tail = newNode;               // Update the tail
+        }
+    }
+
+    // Function to insert a new node at the beginning of the list
+    void insertFirst(int value)
+    {
+        node* newNode = new node(value);  // Create a new node
+        if (head == nullptr)              // Check if the list is empty
+        {
+            head = tail = newNode;        // New node becomes head and tail
+        }
+        else
+        {
+            newNode->next = head;         // Link new node to the current head
+            head = newNode;               // Update the head
+        }
+    }
+
+    // Function to insert a new node at a specific position (1-based index)
+    void insertAtPosition(int position, int value)
+    {
+        if (position < 1)                 // Check for invalid position
+        {
+            cout << "Invalid position!" << endl;
+            return;
+        }
+
+        if (position == 1)                // If position is 1, insert at the beginning
+        {
+            insertFirst(value);
+            return;
+        }
+
+        node* newNode = new node(value);  // Create a new node
+        node* temp = head;
+        int currentPosition = 1;
+
+        // Traverse the list to find the position before the desired index
+        while (temp != nullptr && currentPosition < position - 1)
+        {
+            temp = temp->next;
+            currentPosition++;
+        }
+
+        if (temp == nullptr)              // If position is out of bounds
+        {
+            cout << "Position out of bounds!" << endl;
+            delete newNode;
+            return;
+        }
+
+        // Insert the new node at the specified position
+        newNode->next = temp->next;
+        temp->next = newNode;
+
+        // Update tail if the new node is inserted at the end
+        if (newNode->next == nullptr)
+        {
+            tail = newNode;
+        }
+    }
+
+    // Function to display the list elements
+    void display()
+    {
+        if (head == nullptr)              // Check if the list is empty
+        {
+            cout << "The list is empty" << endl;
+            return;
+        }
+
+        node* temp = head;
+        while (temp != nullptr)           // Traverse the list and print data
+        {
+            cout << temp->data << " -> ";
+            temp = temp->next;
+        }
+        cout << "nullptr" << endl;        // Indicate end of the list
+    }
+};
+
+int main() {
+    list myList;
+
+    // Insert elements at the end of the list
+    myList.insertLast(10);
+    myList.insertLast(20);
+    myList.insertLast(30);
+    cout << "My list after inserting at the end:" << endl;
+    myList.display();
+
+    // Insert an element at the beginning of the list
+    myList.insertFirst(5);
+    cout << "My list after inserting at the beginning:" << endl;
+    myList.display();
+
+    // Insert an element at a specific position
+    myList.insertAtPosition(3, 15);
+    cout << "My list after inserting 15 at position 3:" << endl;
+    myList.display();
+
+    // Insert another element at the beginning (position 1)
+    myList.insertAtPosition(1, 1);
+    cout << "My list after inserting 1 at position 1:" << endl;
+    myList.display();
+
+    // Try to insert an element at an out-of-bounds position
+    myList.insertAtPosition(10, 50);
+    cout << "My list after trying to insert at position 10:" << endl;
+    myList.display();
+
+    return 0;
+}
 
